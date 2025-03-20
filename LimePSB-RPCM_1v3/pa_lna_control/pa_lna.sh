@@ -33,6 +33,18 @@ for  param in "$@"; do
     fi
 done
 
+# Find LEDs
+led3R=$(gpiofind "LED3_R")
+led3G=$(gpiofind "LED3_G")
+led4R=$(gpiofind "LED4_R")
+led4G=$(gpiofind "LED4_G")
+
+# Test if GPIOs found in the system
+if [ -z "$led3R" ] || [ -z "$led3G" ] || [ -z "$led4R" ] || [ -z "$led4G" ]
+then
+    echo "LED(s) not foud."
+fi
+
 # Find required GPIOs for PA and LNA control
 en_txa_pa=$(gpiofind "EN_TXA_PA")
 en_txb_pa=$(gpiofind "EN_TXB_PA")
@@ -55,5 +67,29 @@ gpioset $en_txa_pa=$1
 gpioset $en_rxa_lna=$2
 gpioset $en_txb_pa=$3
 gpioset $en_rxb_lna=$4
+
+# Set Channel A LEDs
+if [ "$1" -eq 1 ] || [ "$2" -eq 1 ]
+then
+	# Green on, red off
+	gpioset $led3G=0
+	gpioset $led3R=1
+else
+	# Green off, red on
+	gpioset $led3G=1
+	gpioset $led3R=0
+fi
+
+# Set Channel B LEDs
+if [ "$3" -eq 1 ] || [ "$4" -eq 1 ]
+then
+	# Green on, red off
+	gpioset $led4G=0
+	gpioset $led4R=1
+else
+	# Green off, red on
+	gpioset $led4G=1
+	gpioset $led4R=0
+fi
 
 exit 0
