@@ -161,6 +161,6 @@ then
     exit 1
 fi
 
-done=$(gpioget $chip_select)
+done=$(gpioget $fpga_cdone)
 gpioset $fpga_cdone_led=$done
 sleep 1
