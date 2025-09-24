@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "dac_app.h": "c",
+        "stdio.h": "c",
+        "errno.h": "c",
+        "*.c_": "c",
+        "system_error": "c",
+        "array": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "rffe_app.h": "c",
+        "pac1720_app.h": "c",
+        "unistd.h": "c",
+        "time.h": "c",
+        "numbers": "c",
+        "helpers_app.h": "c",
+        "gpiod.h": "c"
+    }
+}

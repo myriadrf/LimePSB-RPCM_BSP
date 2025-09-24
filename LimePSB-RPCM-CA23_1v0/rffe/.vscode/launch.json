@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug pactr",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/pactr",  // executable built by tasks.json
+            //"args": [],                                  // optional command-line arguments
+            //"args": ["--lmsrx", "w"],
+            //"args": ["--rflb", "0"],
+            //"args": ["--rfband", "3"],
+            //"args": ["--lmsrx", "w"],
+            //"args": ["--paon", "1"],
+            //"args": ["--rx1att", "10"],
+            "args": ["--pd", "1"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,                    // set to true if you want a separate console
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",           // adjust if gdb is elsewhere
+            "preLaunchTask": "build project"            // matches the label in tasks.json
+        }
+    ]
+}
