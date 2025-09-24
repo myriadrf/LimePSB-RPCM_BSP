@@ -1,0 +1,194 @@
+/dts-v1/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	fragment@100 {
+		target = <0xffffffff>;
+		phandle = <0x01>;
+
+		__overlay__ {
+			status = "okay";
+			phandle = <0x05>;
+		};
+	};
+
+	fragment@101 {
+		target = <0xffffffff>;
+
+		__dormant__ {
+			status = "okay";
+		};
+	};
+
+	fragment@102 {
+		target = <0xffffffff>;
+
+		__dormant__ {
+			status = "okay";
+		};
+	};
+
+	__overrides__ {
+		i2c0 = [00 00 00 01 74 61 72 67 65 74 3a 30 3d 00 ff ff ff ff 00 00 00 01 74 61 72 67 65 74 2d 70 61 74 68 3f 3d 30 00 00 00 00 00 2b 31 30 31 2b 31 30 32 00];
+		i2c_csi_dsi = [00 00 00 01 74 61 72 67 65 74 3a 30 3d 00 ff ff ff ff 00 00 00 01 74 61 72 67 65 74 2d 70 61 74 68 3f 3d 30 00 00 00 00 00 2b 31 30 31 2b 31 30 32 00];
+		i2c_csi_dsi0 = [00 00 00 01 74 61 72 67 65 74 3a 30 3d 00 ff ff ff ff 00 00 00 01 74 61 72 67 65 74 2d 70 61 74 68 3f 3d 30 00 00 00 00 00 2b 31 30 31 2b 31 30 32 00];
+		i2c1 = [00 00 00 01 74 61 72 67 65 74 3a 30 3d 00 ff ff ff ff 00 00 00 01 74 61 72 67 65 74 2d 70 61 74 68 3f 3d 30 00 00 00 00 00 2d 31 30 31 2d 31 30 32 00];
+		i2c2 = <0x01 0x74617267 0x65743f3d 0x30000000 0x17461 0x72676574 0x2d706174 0x683d6932 0x63320000 0x2d 0x3130312d 0x31303200>;
+		i2c3 = <0x01 0x74617267 0x65743f3d 0x30000000 0x17461 0x72676574 0x2d706174 0x683d6932 0x63330000 0x2d 0x3130312d 0x31303200>;
+		i2c4 = <0x01 0x74617267 0x65743f3d 0x30000000 0x17461 0x72676574 0x2d706174 0x683d6932 0x63340000 0x2d 0x3130312d 0x31303200>;
+		i2c5 = <0x01 0x74617267 0x65743f3d 0x30000000 0x17461 0x72676574 0x2d706174 0x683d6932 0x63350000 0x2d 0x3130312d 0x31303200>;
+		i2c6 = <0x01 0x74617267 0x65743f3d 0x30000000 0x17461 0x72676574 0x2d706174 0x683d6932 0x63360000 0x2d 0x3130312d 0x31303200>;
+		i2c-path = [00 00 00 01 74 61 72 67 65 74 3f 3d 30 00 00 00 00 01 74 61 72 67 65 74 2d 70 61 74 68 00 00 00 00 00 2d 31 30 31 2d 31 30 32 00];
+		gpiopin = [00 00 00 02 62 72 63 6d 2c 70 69 6e 73 3a 30 00 00 00 00 03 69 6e 74 65 72 72 75 70 74 73 3a 30 00];
+		addr = <0x04 0x7265673a 0x30000000 0x27265 0x673a3000>;
+		mcp23008 = [00 00 00 00 3d 32 00];
+		noints = [00 00 00 00 21 31 21 33 00];
+	};
+
+	fragment@1 {
+		target = <0xffffffff>;
+
+		__overlay__ {
+
+			mcp23017_pins@20 {
+				brcm,pins = <0x04>;
+				brcm,function = <0x00>;
+				phandle = <0x02>;
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <0x04>;
+
+		__dormant__ {
+			compatible = "microchip,mcp23008";
+		};
+	};
+
+	fragment@3 {
+		target = <0x04>;
+
+		__overlay__ {
+			#interrupt-cells = <0x02>;
+			pinctrl-names = "default";
+			pinctrl-0 = <0x02>;
+			interrupt-parent = <0xffffffff>;
+			interrupts = <0x04 0x02>;
+			interrupt-controller;
+			microchip,irq-mirror;
+			phandle = <0x03>;
+		};
+	};
+
+	fragment@4 {
+		target = <0x05>;
+
+		__overlay__ {
+			#address-cells = <0x01>;
+			#size-cells = <0x00>;
+
+//			mcp@20 {
+//				compatible = "microchip,mcp23017";
+//				reg = <0x20>;
+//				gpio-controller;
+//				#gpio-cells = <0x02>;
+//				status = "okay";
+//				phandle = <0x04>;
+//			};
+
+
+			mcp23017_20: mcp23017@20 {
+				compatible = "microchip,mcp23017";
+				reg = <0x20>;
+				gpio-controller;
+				#gpio-cells = <0x02>;
+				status = "okay";
+				phandle = <0x04>;
+				gpio-line-names = "LED1_R", "LED1_G", "LED2_R", "LED2_G", "LED3_R", "LED3_G", "LED4_R", "LED4_G",
+						"FPGA_PROGRAM_B", "FPGA_DONE", "FPGA_FLASH_SEL", "ADF_MUXOUT", "POE_TYP4", "USB_PD_FAULT", "M.2_LED_WWAN", "M.2_W_DISABLE_1";
+			};
+			
+			mcp23017_21: mcp23017@21 {
+				compatible = "microchip,mcp23017";
+				reg = <0x21>;
+				gpio-controller;
+				#gpio-cells = <0x02>;
+				status = "okay";
+				phandle = <0x06>;
+				gpio-line-names = "EN_VCC3P3_RF1", "EN_VCC5P0_RF1", "EN_VCC8P0_RF1", "EN_TX1_PA_VDD", "EN_TX1_PA_VG2", "EN_VCC3P3_RF2", "EN_VCC5P0_RF2", "EN_VCC8P0_RF2",
+						"EN_TX2_PA_VDD", "EN_TX2_PA_VG2", "SW_REG_RST", "RFPD_EN", "RPI_SYNC_IO_SEL", "RPI_SYNC_IN_SEL", "SYNC_OUT_SEL", "EXT_SYNC_OUT_SEL";
+			};
+
+			mcp23017_22: mcp23017@22 {
+				compatible = "microchip,mcp23017";
+				reg = <0x22>;
+				gpio-controller;
+				#gpio-cells = <0x02>;
+				status = "okay";
+				phandle = <0x07>;
+				gpio-line-names = "M.2_CONFIG_0", "M.2_CONFIG_1", "M.2_CONFIG_2", "M.2_CONFIG_3", "RF_SW_LMS_TX", "RF_SW_LMS_RX2", "RF_SW_LMS_RX3", "RF_SW_FBCAK",
+						"RX1_ADD_V1", "RX1_ADD_V2", "RX1_ADD_V3", "RX1_ADD_V4", "RX2_ADD_V1", "RX2_ADD_V2", "RX2_ADD_V3", "RX2_ADD_V4";
+			};
+
+
+
+
+
+		};
+	};
+
+	__symbols__ {
+		busfrag = "/fragment@100";
+		i2cbus = "/fragment@100/__overlay__";
+		mcp23017_pins = "/fragment@1/__overlay__/mcp23017_pins@20";
+		mcp23017_irq = "/fragment@3/__overlay__";
+		mcp23017 = "/fragment@4/__overlay__/mcp@20";
+	};
+
+	__fixups__ {
+		i2c_arm = "/fragment@100:target:0";
+		i2c0if = "/fragment@101:target:0";
+		i2c0mux = "/fragment@102:target:0";
+		i2c0 = "/__overrides__:i2c0:14";
+		i2c_csi_dsi = "/__overrides__:i2c_csi_dsi:14";
+		i2c_csi_dsi0 = "/__overrides__:i2c_csi_dsi0:14";
+		i2c1 = "/__overrides__:i2c1:14";
+		gpio = "/fragment@1:target:0\0/fragment@3/__overlay__:interrupt-parent:0";
+	};
+
+	__local_fixups__ {
+
+		__overrides__ {
+			i2c0 = <0x00 0x12>;
+			i2c_csi_dsi = <0x00 0x12>;
+			i2c_csi_dsi0 = <0x00 0x12>;
+			i2c1 = <0x00 0x12>;
+			i2c2 = <0x00 0x0e>;
+			i2c3 = <0x00 0x0e>;
+			i2c4 = <0x00 0x0e>;
+			i2c5 = <0x00 0x0e>;
+			i2c6 = <0x00 0x0e>;
+			i2c-path = <0x00 0x0e>;
+			gpiopin = <0x00 0x10>;
+			addr = <0x00 0x0a>;
+		};
+
+		fragment@2 {
+			target = <0x00>;
+		};
+
+		fragment@3 {
+			target = <0x00>;
+
+			__overlay__ {
+				pinctrl-0 = <0x00>;
+			};
+		};
+
+		fragment@4 {
+			target = <0x00>;
+		};
+	};
+};
