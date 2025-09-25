@@ -6,4 +6,4 @@ LimeSDR boards require the LimeSuiteNG software driver to be installed.
 
 To ensure proper functionality, please use the develop branch of LimeSuiteNG.
 
-Detailed step-by-step installation guidance can be found in the [official documentation.](https://limesuiteng.myriadrf.org/development/buildsource/buildlinux)
+Detailed step-by-step installation guidance can be found in the [official documentation.](https://limesuiteng.myriadrf.org/development/buildsource/buildlinux) GitHub repository can be found [here.](https://github.com/myriadrf/LimeSuiteNG)
