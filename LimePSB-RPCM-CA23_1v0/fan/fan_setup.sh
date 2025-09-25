@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#Set PWM Push-pull
+i2cset -y 10 0x2f 0x2b 0x01
+
+#Set PWM frequency
+i2cset -y 10 0x2f 0x2d 0x03
+
+#Set PWM frequency divider to 240
+i2cset -y 10 0x2f 0x31 0xf0
+
+#Set FAN speed
+i2cset -y 10 0x2f 0x30 0x90
