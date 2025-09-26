@@ -15,11 +15,11 @@ Operation of the RF front-end control software requires the following components
   - Installation instructions are provided in the gpio_expander folder.
 - LIBIIO Library (v0.26)
   - Used for communication with RF hardware.
-  - [Source](https://github.com/analogdevicesinc/libiio/tree/main) and [installation instructions](https://github.com/analogdevicesinc/libiio/blob/main/README_BUILD.md) are available in the official LIBIIO repository
-- LIBGPIOD library (v 1.6.3)
-  - Used for accessing GPIOs
+  - [Source](https://github.com/analogdevicesinc/libiio/tree/main) and [installation instructions](https://github.com/analogdevicesinc/libiio/blob/main/README_BUILD.md) are available in the official LIBIIO repository.
+- LIBGPIOD library (v1.6.3)
+  - Used for accessing GPIOs.
   - Install it using te following command: sudo apt install libgpiod-dev gpiod
-  - Documentation may be find [here](https://libgpiod.readthedocs.io/en/latest/index.html)
+  - Documentation may be find [here](https://libgpiod.readthedocs.io/en/latest/index.html).
 
   The RFFE CLI software depends on both components to ensure correct functionality.
 
@@ -28,8 +28,8 @@ Operation of the RF front-end control software requires the following components
 To compile the software do the following in the rffe folder:
 
 ```
-- mkdir build
-- cd build
-- cmake ..
-- make
+mkdir build
+cd build
+cmake ..
+make
 ```
