@@ -60,7 +60,11 @@ void print_help(const char *progname) {
     printf("      --pd <1,2>         Read power detector value\n");
     printf("      --tdd <0,1>        Set TDD signal from FPGA to 0 or 1.\n");
     printf("      --adc              Get data from PAC1720.\n");
-    printf("      --tst              Used for developing.\n");
+    printf("      --rddac1           Get current value from AD5662 DAC, channel 1.\n");
+    printf("      --rddac2           Get current value from AD5662 DAC, channel 2.\n");
+    printf("      --wrdac1 <0-65536> Set DAC AD5662 value, channel 1.\n");
+    printf("      --wrdac2 <0-65536> Set DAC AD5662 value, channel 2.\n");
+    //printf("      --tst              Used for developing.\n");
 }
 
 void print_version(const char *progname) {
@@ -88,6 +92,34 @@ int parse_int_0_to_15(const char *arg, const char *optname) {
 
     if (val < 0 || val > 15) {
         fprintf(stderr, "Error: %s value must be between 0 and 15, got %ld\n", optname, val);
+        exit(EXIT_FAILURE);
+    }
+
+    return (int)val;
+}
+
+/**
+ * Parse string as integer and check if it's in the allowed range.
+ *
+ *
+ * @param arg      String argument to validate
+ * @param optname  Option name.
+ * @param rstart   Range start.
+ * @param rend     Range end.
+ * @return      Parsed integer if valid. Exits program on error.
+ */
+int parse_int_range(const char *arg, const char *optname, int rstart, int rend) {
+    char *endptr;
+    errno = 0;
+    long val = strtol(arg, &endptr, 10);
+
+    if (errno != 0 || *endptr != '\0') {
+        fprintf(stderr, "Error: %s expects an integer, got '%s'\n", optname, arg);
+        exit(EXIT_FAILURE);
+    }
+
+    if (val < rstart || val > rend) {
+        fprintf(stderr, "Error: %s value must be between %d and %d, got %ld\n", optname, rstart, rend, val);
         exit(EXIT_FAILURE);
     }
 
@@ -267,6 +299,10 @@ struct rf_params {
     struct rf_param pd;
     struct rf_param tdd;
     struct rf_param adc;
+    struct rf_param rddac1;
+    struct rf_param rddac2;
+    struct rf_param wrdac1;
+    struct rf_param wrdac2;
     struct rf_param tst;
 };
 
@@ -299,6 +335,10 @@ enum {
     OPT_PD,
     OPT_TDD,
     OPT_ADC,
+    OPT_RDDAC1,
+    OPT_RDDAC2,
+    OPT_WRDAC1,
+    OPT_WRDAC2,
     OPT_TST
 };
 
@@ -332,6 +372,10 @@ void process_options(int argc, char *argv[], struct options *opts) {
         {"pd",      required_argument, 0, OPT_PD},
         {"tdd",     required_argument, 0, OPT_TDD},
         {"adc",     no_argument,       0, OPT_ADC},
+        {"rddac1",  no_argument,       0, OPT_RDDAC1},
+        {"rddac2",  no_argument,       0, OPT_RDDAC2},
+        {"wrdac1",  required_argument, 0, OPT_WRDAC1},
+        {"wrdac2",  required_argument, 0, OPT_WRDAC2},
         {"tst",     no_argument,       0, OPT_TST},
         {0, 0, 0, 0}
     };
@@ -452,6 +496,24 @@ void process_options(int argc, char *argv[], struct options *opts) {
 
         case OPT_ADC:
             opts->rf.adc.set = 1;
+            break;
+
+        case OPT_RDDAC1:
+            opts->rf.rddac1.set = 1;
+            break;
+
+        case OPT_RDDAC2:
+            opts->rf.rddac2.set = 1;
+            break;
+
+        case OPT_WRDAC1:
+            opts->rf.wrdac1.value = parse_int_range(optarg, "--wrdac1", 0, 65535);
+            opts->rf.wrdac1.set = 1;
+            break;
+
+        case OPT_WRDAC2:
+            opts->rf.wrdac2.value = parse_int_range(optarg, "--wrdac2", 0, 65535);
+            opts->rf.wrdac2.set = 1;
             break;
 
         case OPT_TST:
@@ -687,6 +749,44 @@ void execute_commands(struct options *opts)
     if (opts->rf.adc.set)
     {
         pac1720_measure();
+    }
+
+    //
+    if (opts->rf.rddac1.set)
+    {
+        unsigned int value;
+        if (rffe_rd_dac(1, &value) == 0)
+        {
+            printf("AD5662 value of channel #1 is: %d\n", value);
+        }
+    }
+
+    //
+    if (opts->rf.rddac2.set)
+    {
+        unsigned int value;
+        if (rffe_rd_dac(2, &value) == 0)
+        {
+            printf("AD5662 value of channel #2 is: %d\n", value);
+        }
+    }
+
+    //
+    if (opts->rf.wrdac1.set)
+    {
+        if (rffe_wr_dac(1, opts->rf.wrdac1.value) == 0)
+        {
+            printf("Value %d written to AD5662 of channel #1.\n", opts->rf.wrdac1.value);
+        }
+    }
+
+    //
+    if (opts->rf.wrdac2.set)
+    {
+        if (rffe_wr_dac(2, opts->rf.wrdac2.value) == 0)
+        {
+            printf("Value %d written to AD5662 of channel #2.\n", opts->rf.wrdac2.value);
+        }
     }
 
     //

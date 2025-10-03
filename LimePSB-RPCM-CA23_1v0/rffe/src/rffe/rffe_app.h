@@ -19,5 +19,7 @@ int rffe_lna_on(unsigned int channel);
 int rffe_rxatt(unsigned int channel, unsigned int att);
 int rffe_rflb(unsigned int onoff);
 int rffe_tdd(unsigned int lh);
+int rffe_rd_dac(unsigned int channel, unsigned int *value);
+int rffe_wr_dac(unsigned int channel, unsigned int value);
 
 #endif // RFFE_APP_H

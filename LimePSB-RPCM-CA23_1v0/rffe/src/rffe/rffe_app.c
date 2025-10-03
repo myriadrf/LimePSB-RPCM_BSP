@@ -413,6 +413,99 @@ int rffe_pa_on(unsigned int channel)
 }
 
 /**
+ * Read current DAC AD5662 value
+ *
+ * @param channel - channel number (e.g. 1 for TRX1, 2 for TRX2)
+ * @param value - Pointer to an unsigned integer where the read value will be stored.
+ * @return 0 on success, -1 on failure
+ */
+int rffe_rd_dac(unsigned int channel, unsigned int *value)
+{
+    int ret = 0;
+    struct iio_device *dac = NULL;
+
+    struct iio_context *ctx = iio_create_default_context();
+    if (!ctx) {
+        fprintf(stderr, "Unable to create IIO context\n");
+        return -1;
+    }
+
+    //struct iio_device *dac0 = find_ad5662_by_cs(ctx, 0); // CS0 (GPIO3)
+    //struct iio_device *dac1 = find_ad5662_by_cs(ctx, 1); // CS1 (GPIO2)
+
+    do
+    {
+        //
+        if (channel == 1)
+        {
+            dac = find_ad5662_by_cs(ctx, 0); // CS0 (GPIO3)
+            if (dac == NULL) { ret = -1; break; }
+            ret = 0;
+        }
+        else if (channel == 2)
+        {
+            dac = find_ad5662_by_cs(ctx, 1); // CS1 (GPIO2)
+            if (dac == NULL) { ret = -1; break; }
+            ret = 0;
+        }
+        else
+            ret = -1;
+
+        if (ad5662_read_raw(dac, value) < 0) { ret = -1; break; }
+
+    } while (0);
+
+    iio_context_destroy(ctx);
+    return ret;
+}
+
+/**
+ * Read current DAC AD5662 value
+ *
+ * @param channel - channel number (e.g. 1 for TRX1, 2 for TRX2)
+ * @param value - value to be written.
+ * @return 0 on success, -1 on failure
+ */
+int rffe_wr_dac(unsigned int channel, unsigned int value)
+{
+    int ret = 0;
+    struct iio_device *dac = NULL;
+
+    //
+    struct iio_context *ctx = iio_create_default_context();
+    if (!ctx) {
+        fprintf(stderr, "Unable to create IIO context\n");
+        return -1;
+    }
+
+    //
+    do
+    {
+        //
+        if (channel == 1)
+        {
+            dac = find_ad5662_by_cs(ctx, 0); // CS0 (GPIO3)
+            if (dac == NULL) { ret = -1; break; }
+            ret = 0;
+        }
+        else if (channel == 2)
+        {
+            dac = find_ad5662_by_cs(ctx, 1); // CS1 (GPIO2)
+            if (dac == NULL) { ret = -1; break; }
+            ret = 0;
+        }
+        else
+            ret = -1;
+
+        if (ad5662_write_raw(dac, value) < 0) { ret = -1; break; }
+
+    } while (0);
+
+    iio_context_destroy(ctx);
+    return ret;
+}
+
+/**
  * Switch LNA of RF channel off.
  *
  * @param channel - channel number (e.g. 1 for TRX1, 2 for TRX2)
